@@ -1,2 +1,21 @@
 # corsproxy
-nginx reverse proxy for CORS
+Nginx reverse proxy for CORS
+
+
+1. Build the Docker Image:
+
+    docker build -t cors-nginx .
+
+2. Run a Container from the Image:
+
+    docker run -d -p 4321:80 --name cors-nginx-container cors-nginx
+
+3. To test the example url mapping
+
+    curl -i "http://localhost:4321/api/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m" 
+
+4. Follow the [Guide](https://github.com/bidzhao/corsproxy/Guide%20for%20Adding%20New%20URI%20Mappings.pdf) to change/add new url mappings in Nginx configuration  file.
+
+5. Once the nginx.conf file is changed, docker container is required to be restarted.
+
+    docker restart cors-nginx-container
