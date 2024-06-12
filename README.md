@@ -7,7 +7,7 @@
 
 2. Run a Container from the Image:
 
-    docker run -d -p 4321:80 --name cors-nginx-container cors-nginx
+    docker run -d -v ./nginx.conf:/etc/nginx/nginx.conf -p 4321:80 --name cors-nginx-container cors-nginx
 
 3. To test the example url mapping
 
