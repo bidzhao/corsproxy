@@ -9,7 +9,7 @@
 
     docker run -d -v ./nginx.conf:/etc/nginx/nginx.conf -p 4321:80 --name cors-nginx-container cors-nginx
 or:
-    docker run -e PREFIX=testrail -e TARGET="https://railflow.testrail.io" -d -v ./default.conf.template:/etc/nginx/templates/default.conf.template -p 4321:80 --name cors-nginx-container cors-nginx
+    docker run -e PREFIX=api -e TARGET="https://api.open-meteo.com" -d -v ./default.conf.template:/etc/nginx/templates/default.conf.template -p 4321:80 --name cors-nginx-container cors-nginx
 
 3. To test the example url mapping
 
