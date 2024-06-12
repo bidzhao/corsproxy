@@ -8,7 +8,9 @@
 2. Run a Container from the Image:
 
     docker run -d -v ./nginx.conf:/etc/nginx/nginx.conf -p 4321:80 --name cors-nginx-container cors-nginx
-or:
+
+or if you have only one url mapping:
+
     docker run -e PREFIX=api -e TARGET="https://api.open-meteo.com" -d -v ./default.conf.template:/etc/nginx/templates/default.conf.template -p 4321:80 --name cors-nginx-container cors-nginx
 
 3. To test the example url mapping
