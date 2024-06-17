@@ -1,29 +1,27 @@
 server {
     listen 80;
     server_name _;
-    
-    location / {
-        add_header Access-Control-Allow-Origin "*";
-        add_header Access-Control-Allow-Credentials true;
-        add_header Access-Control-Allow-Headers X-Requested-With,Authorization,Content-Type;
-        add_header Access-Control-Allow-Methods "*";
-        add_header Access-Control-Max-Age 8640000;
-        
-        # Proxy settings
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
 
     location /${PREFIX} {
         rewrite ^/${PREFIX}/(.*) /$1 break;
         # Handle CORS for preflight requests
         if ($request_method = OPTIONS) {
+            add_header Access-Control-Allow-Origin "*" always;
+            add_header Access-Control-Allow-Credentials true always;
+            add_header Access-Control-Allow-Headers X-Requested-With,Authorization,Content-Type always;
+            add_header Access-Control-Allow-Methods "*" always;
+            add_header Access-Control-Max-Age 8640000 always;
             return 204;
         }
+        
         # Proxy pass to target server
+        proxy_hide_header Access-Control-Allow-Origin;
+        add_header Access-Control-Allow-Origin "*" always;
+        add_header Access-Control-Allow-Credentials true always;
+        add_header Access-Control-Allow-Headers X-Requested-With,Authorization,Content-Type always;
+        add_header Access-Control-Allow-Methods "*" always;
+        add_header Access-Control-Max-Age 8640000 always;
+        add_header Cache-Control no-cache;
         proxy_pass ${TARGET};
     }
 }
