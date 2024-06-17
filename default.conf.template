@@ -25,3 +25,40 @@ server {
         proxy_pass ${TARGET};
     }
 }
+
+server {
+    listen 443 ssl;
+    server_name _;
+    ssl_certificate /etc/servercert.pem;
+    ssl_certificate_key /etc/serverkey.pem;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    
+    location / {
+      return 200 "OK";
+    }
+
+    location /${PREFIX} {
+        rewrite ^/${PREFIX}/(.*) /$1 break;
+        # Handle CORS for preflight requests
+        if ($request_method = OPTIONS) {
+            add_header Access-Control-Allow-Origin "*" always;
+            add_header Access-Control-Allow-Credentials true always;
+            add_header Access-Control-Allow-Headers X-Requested-With,Authorization,Content-Type always;
+            add_header Access-Control-Allow-Methods "*" always;
+            add_header Access-Control-Max-Age 8640000 always;
+            return 204;
+        }
+        
+        # Proxy pass to target server
+        proxy_hide_header Access-Control-Allow-Origin;
+        add_header Access-Control-Allow-Origin "*" always;
+        add_header Access-Control-Allow-Credentials true always;
+        add_header Access-Control-Allow-Headers X-Requested-With,Authorization,Content-Type always;
+        add_header Access-Control-Allow-Methods "*" always;
+        add_header Access-Control-Max-Age 8640000 always;
+        add_header Cache-Control no-cache;
+        proxy_pass ${TARGET};
+    }
+}
